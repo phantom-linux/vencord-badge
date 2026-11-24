@@ -1,0 +1,19 @@
+# Ce dossier ne sert que des images : aucune exécution de script.
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+RemoveHandler .php .phtml .phar
+<FilesMatch "\.(php|phtml|phar|html?|svg)$">
+    Require all denied
+</FilesMatch>
+Options -Indexes -ExecCGI
+
+# Débit de téléchargement : 10 Mo/s (valeur en Kio/s). Nécessite mod_ratelimit.
+<IfModule mod_ratelimit.c>
+    SetOutputFilter RATE_LIMIT
+    SetEnv rate-limit 10240
+</IfModule>
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set Cache-Control "public, max-age=86400, immutable"
+</IfModule>
